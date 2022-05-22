@@ -44,5 +44,14 @@ public class Professor {
     public void setProntuario(String prontuario) {
         this.prontuario = prontuario;
     }
+
+    @Override
+    public String toString() {
+        return "Professor{" +
+                "id=" + id +
+                ", nome='" + nome + '\'' +
+                ", prontuario='" + prontuario + '\'' +
+                '}';
+    }
 }
 
