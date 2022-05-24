@@ -3,6 +3,7 @@ package br.com.waste.escola.services;
 import br.com.waste.escola.models.Professor;
 import br.com.waste.escola.repositories.ProfessorRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -16,6 +17,7 @@ public class ProfessorService {
     public ProfessorService(ProfessorRepository professorRepository) {
         this.professorRepository = professorRepository;
     }
+
 
     public void menu(Scanner input) {
         boolean continuar = true;
@@ -49,7 +51,7 @@ public class ProfessorService {
                     this.update(input);
                     break;
                 case 5:
-                    System.out.println("TODO: remove");
+                    this.delete(input);
                     break;
                 default:
                     continuar = false;
@@ -57,6 +59,7 @@ public class ProfessorService {
             }
         } while (continuar);
     }
+
 
     private void create(Scanner input) {
         System.out.println("\n>>> CADASTRANDO: professor <<<");
@@ -84,7 +87,7 @@ public class ProfessorService {
             Professor professor = opt.get();
             this.showFormatter(professor);
         } else {
-            System.out.println("\n>>> ERRO: ID [" + id + "] INVÁLIDO!");
+            System.out.println(">>> ERRO: ID [" + id + "] INVÁLIDO!");
         }
     }
 
@@ -126,6 +129,22 @@ public class ProfessorService {
             System.out.println("\n>>> ERRO: ID [" + id + "] INVÁLIDO!");
         }
 
+    }
+
+    private void delete(Scanner input) {
+        System.out.println("\n>>> DELETANDO: professor <<<");
+
+        System.out.print("> Professor ID: ");
+        Long id = input.nextLong();
+
+        try {
+            professorRepository.deleteById(id);
+            System.out.println("\n>>> SUCESSO: PROFESSOR [" + id + "] DELETADO!");
+
+        } catch (EmptyResultDataAccessException error) {
+            System.out.println("\n>>> ERRO: ID [" + id + "] INVÁLIDO!");
+            System.out.println(">>> ERROR MESSAGE: " + error);
+        }
     }
 
 
