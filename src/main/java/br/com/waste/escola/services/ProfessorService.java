@@ -40,10 +40,10 @@ public class ProfessorService {
                     this.create(input);
                     break;
                 case 2:
-                    this.readOne(input);
+                    this.showOne(input);
                     break;
                 case 3:
-                    System.out.println("TODO: show all");
+                    this.showAll();
                     break;
                 case 4:
                     this.update(input);
@@ -72,21 +72,27 @@ public class ProfessorService {
         professorRepository.save(professor);
     }
 
-    private void readOne(Scanner input) {
+    private void showOne(Scanner input) {
         System.out.println("\n>>> DATALHES: professor <<<");
 
         System.out.print("> Professor ID: ");
         Long id = input.nextLong();
 
         Optional<Professor> opt = professorRepository.findById(id);
+        System.out.println();
         if (opt.isPresent()) {
             Professor professor = opt.get();
-            System.out.println("\n>>> RESULTADO: Professor #" + professor.getId());
-            System.out.println("> NOME: " + professor.getNome());
-            System.out.println("> PRONTUÁRIO: " + professor.getProntuario());
+            this.showFormatter(professor);
         } else {
             System.out.println("\n>>> ERRO: ID [" + id + "] INVÁLIDO!");
         }
+    }
+
+    private void showAll() {
+        Iterable<Professor> professors = professorRepository.findAll();
+
+        System.out.println("\n>>> LISTAGEM: professor <<<\n");
+        professors.forEach(this::showFormatter);
     }
 
     private void update(Scanner input) {
@@ -120,5 +126,14 @@ public class ProfessorService {
             System.out.println("\n>>> ERRO: ID [" + id + "] INVÁLIDO!");
         }
 
+    }
+
+
+    private void showFormatter(Professor professor) {
+        System.out.println("===========================");
+        System.out.println("> ID: " + professor.getId());
+        System.out.println("> NOME: " + professor.getNome());
+        System.out.println("> PRONTUÁRIO: " + professor.getProntuario());
+        System.out.println("===========================");
     }
 }
