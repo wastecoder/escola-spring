@@ -71,7 +71,7 @@ public class ProfessorService {
         String prontuario = input.nextLine();
 
         Professor professor = new Professor(nome, prontuario);
-        System.out.println("Professor [" + nome + "] cadastrado com sucesso!");
+        System.out.println("\n>>> SUCESSO: professor [" + nome + "] cadastrado!");
         professorRepository.save(professor);
     }
 
@@ -82,12 +82,12 @@ public class ProfessorService {
         Long id = input.nextLong();
 
         Optional<Professor> opt = professorRepository.findById(id);
-        System.out.println();
         if (opt.isPresent()) {
             Professor professor = opt.get();
+            System.out.println();
             this.showFormatter(professor);
         } else {
-            System.out.println(">>> ERRO: ID [" + id + "] INVÁLIDO!");
+            this.errorMessage(id);
         }
     }
 
@@ -108,7 +108,9 @@ public class ProfessorService {
         if (opt.isPresent()) {
             input.nextLine();
             Professor professor = opt.get();
-            System.out.println("\n>>> DICA: deixe vazio para não atualizar <<<");
+
+            this.showFormatter(professor);
+            System.out.println("\n>>> DICA: campos vazios não são atualizados");
 
             System.out.print("> nome: ");
             String nome = input.nextLine();
@@ -122,13 +124,12 @@ public class ProfessorService {
                 professor.setProntuario(prontuario);
             }
 
-            System.out.println("Professor [" + id + "] alterado com sucesso!");
+            this.sucessMessage(id, "alterado");
             professorRepository.save(professor);
 
         }else {
-            System.out.println("\n>>> ERRO: ID [" + id + "] INVÁLIDO!");
+            this.errorMessage(id);
         }
-
     }
 
     private void delete(Scanner input) {
@@ -139,14 +140,22 @@ public class ProfessorService {
 
         try {
             professorRepository.deleteById(id);
-            System.out.println("\n>>> SUCESSO: PROFESSOR [" + id + "] DELETADO!");
+            this.sucessMessage(id, "deletado");
 
         } catch (EmptyResultDataAccessException error) {
-            System.out.println("\n>>> ERRO: ID [" + id + "] INVÁLIDO!");
+            this.errorMessage(id);
             System.out.println(">>> ERROR MESSAGE: " + error);
         }
     }
 
+
+    private void sucessMessage(Long id, String action) {
+        System.out.println("\n>>> SUCESSO: professor [" + id + "] " + action + "!");
+    }
+
+    private void errorMessage(Long id) {
+        System.out.println("\n>>> ERRO: professor [" + id + "] inexistente!");
+    }
 
     private void showFormatter(Professor professor) {
         System.out.println("===========================");
