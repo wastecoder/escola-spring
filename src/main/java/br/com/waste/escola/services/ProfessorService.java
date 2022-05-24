@@ -26,24 +26,29 @@ public class ProfessorService {
             System.out.println("+---------------+");
             System.out.println("| 0 - Voltar    |");
             System.out.println("| 1 - Cadastrar |");
-            System.out.println("| 2 - Ler       |");
-            System.out.println("| 3 - Alterar   |");
-            System.out.println("| 4 - Remover   |");
+            System.out.println("| 2 - Consultar |");
+            System.out.println("| 3 - Listar    |");
+            System.out.println("| 4 - Alterar   |");
+            System.out.println("| 5 - Remover   |");
             System.out.println("+---------------+");
             System.out.print("Escolha: ");
             byte escolha = input.nextByte();
+            input.nextLine();   // Evita o bug de String com espaços
 
             switch (escolha) {
                 case 1:
                     this.create(input);
                     break;
                 case 2:
-                    System.out.println("TODO: read");
+                    this.readOne(input);
                     break;
                 case 3:
-                    this.update(input);
+                    System.out.println("TODO: show all");
                     break;
                 case 4:
+                    this.update(input);
+                    break;
+                case 5:
                     System.out.println("TODO: remove");
                     break;
                 default:
@@ -54,7 +59,6 @@ public class ProfessorService {
     }
 
     private void create(Scanner input) {
-        input.nextLine();   // Evita o bug de String com espaços
         System.out.println("\n>>> CADASTRANDO: professor <<<");
 
         System.out.print("> nome: ");
@@ -68,8 +72,24 @@ public class ProfessorService {
         professorRepository.save(professor);
     }
 
-    public void update(Scanner input) {
-        input.nextLine();
+    private void readOne(Scanner input) {
+        System.out.println("\n>>> DATALHES: professor <<<");
+
+        System.out.print("> Professor ID: ");
+        Long id = input.nextLong();
+
+        Optional<Professor> opt = professorRepository.findById(id);
+        if (opt.isPresent()) {
+            Professor professor = opt.get();
+            System.out.println("\n>>> RESULTADO: Professor #" + professor.getId());
+            System.out.println("> NOME: " + professor.getNome());
+            System.out.println("> PRONTUÁRIO: " + professor.getProntuario());
+        } else {
+            System.out.println("\n>>> ERRO: ID [" + id + "] INVÁLIDO!");
+        }
+    }
+
+    private void update(Scanner input) {
         System.out.println("\n>>> ALTERANDO: professor <<<");
 
         System.out.print("> Professor ID: ");
@@ -97,7 +117,7 @@ public class ProfessorService {
             professorRepository.save(professor);
 
         }else {
-            System.out.println("ERRO: ID [" + id + "] INVÁLIDO!");
+            System.out.println("\n>>> ERRO: ID [" + id + "] INVÁLIDO!");
         }
 
     }
