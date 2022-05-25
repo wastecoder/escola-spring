@@ -1,9 +1,10 @@
 package br.com.waste.escola.models;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
-@Table(name = "professor")
+@Table(name = "professores")
 public class Professor {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -12,6 +13,9 @@ public class Professor {
     private String nome;
     @Column(nullable = false, length = 30, unique = true)
     private String prontuario;
+
+    @OneToMany(mappedBy = "professor")
+    private List<Disciplina> disciplinas;
 
     @Deprecated // Só o Hibernate usa
     public Professor() {}
