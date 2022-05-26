@@ -25,6 +25,12 @@ public class Disciplina {
         this.semestre = semestre;
     }
 
+    public Disciplina(String nome, Integer semestre, Professor professor) {
+        this.nome = nome;
+        this.semestre = semestre;
+        this.professor = professor;
+    }
+
     public Long getId() {
         return id;
     }
@@ -47,5 +53,23 @@ public class Disciplina {
 
     public void setSemestre(Integer semestre) {
         this.semestre = semestre;
+    }
+
+    public Professor getProfessor() {
+        return professor;
+    }
+
+    public void setProfessor(Professor professor) {
+        this.professor = professor;
+    }
+
+    @Override
+    public String toString() {
+        return "Disciplina{" +
+                "id=" + id +
+                ", nome='" + nome + '\'' +
+                ", semestre=" + semestre +
+                ", professor=" + professor +
+                '}';
     }
 }

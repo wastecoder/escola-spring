@@ -1,5 +1,6 @@
 package br.com.waste.escola;
 
+import br.com.waste.escola.services.DisciplinaService;
 import br.com.waste.escola.services.ProfessorService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
@@ -10,10 +11,12 @@ import java.util.Scanner;
 @SpringBootApplication
 public class EscolaApplication implements CommandLineRunner {
 	private final ProfessorService professorService;
+	private final DisciplinaService disciplinaService;
 
 	@Autowired
-	public EscolaApplication(ProfessorService professorService) {
+	public EscolaApplication(ProfessorService professorService, DisciplinaService disciplinaService) {
 		this.professorService = professorService;
+		this.disciplinaService = disciplinaService;
 	}
 
 	public static void main(String[] args) {
@@ -27,12 +30,12 @@ public class EscolaApplication implements CommandLineRunner {
 
 		do {
 			System.out.println("\n+----------------+");
-			System.out.println("|   ENTIDADES    |");
+			System.out.println("|    ENTIDADE    |");
 			System.out.println("+----------------+");
 			System.out.println("| 0 - Sair		 |");
 			System.out.println("| 1 - Professor  |");
-			System.out.println("| 2 - Aluno		 |");
-			System.out.println("| 3 - Disciplina |");
+			System.out.println("| 2 - Disciplina |");
+			System.out.println("| 3 - Aluno		 |");
 			System.out.println("+----------------+");
 			System.out.print("Escolha: ");
 			byte escolha = input.nextByte();
@@ -42,7 +45,7 @@ public class EscolaApplication implements CommandLineRunner {
 					professorService.menu(input);
 					break;
 				case 2:
-					System.out.println("TODO: Aluno");
+					disciplinaService.menu(input);
 					break;
 				case 3:
 					System.out.println("TODO: Disciplina");

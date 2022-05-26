@@ -109,8 +109,10 @@ public class ProfessorService {
             input.nextLine();
             Professor professor = opt.get();
 
+            System.out.println();
             this.showFormatter(professor);
-            System.out.println("\n>>> DICA: campos vazios não são atualizados");
+            System.out.println(">>> DICA 1: dados do professor exibidos acima");
+            System.out.println(">>> DICA 2: campos vazios não são atualizados\n");
 
             System.out.print("> nome: ");
             String nome = input.nextLine();
