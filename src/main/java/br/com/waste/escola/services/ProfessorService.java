@@ -1,11 +1,13 @@
 package br.com.waste.escola.services;
 
+import br.com.waste.escola.models.Disciplina;
 import br.com.waste.escola.models.Professor;
 import br.com.waste.escola.repositories.ProfessorRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.Scanner;
 
@@ -160,10 +162,14 @@ public class ProfessorService {
     }
 
     private void showFormatter(Professor professor) {
+        List<Disciplina> disciplinaList = professor.getDisciplinas();
         System.out.println("===========================");
         System.out.println("> ID: " + professor.getId());
         System.out.println("> NOME: " + professor.getNome());
         System.out.println("> PRONTUÁRIO: " + professor.getProntuario());
+        for (Disciplina disciplina : disciplinaList) {
+            System.out.println("> DISCIPLINA [" + disciplina.getId() + "]: " + disciplina.getNome() + ", " + disciplina.getSemestre());
+        }
         System.out.println("===========================");
     }
 }

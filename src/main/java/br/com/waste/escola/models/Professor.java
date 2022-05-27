@@ -14,7 +14,7 @@ public class Professor {
     @Column(nullable = false, length = 30, unique = true)
     private String prontuario;
 
-    @OneToMany(mappedBy = "professor")
+    @OneToMany(mappedBy = "professor", fetch = FetchType.EAGER)
     private List<Disciplina> disciplinas;
 
     @Deprecated // Só o Hibernate usa
@@ -23,6 +23,10 @@ public class Professor {
     public Professor(String nome, String prontuario) {
         this.nome = nome;
         this.prontuario = prontuario;
+    }
+
+    public List<Disciplina> getDisciplinas() {
+        return disciplinas;
     }
 
     public Long getId() {
