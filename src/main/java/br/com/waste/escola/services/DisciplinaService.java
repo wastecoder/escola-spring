@@ -194,11 +194,15 @@ public class DisciplinaService {
 
     private void showFormatter(Disciplina disciplina) {
         Professor prof = disciplina.getProfessor();
+        String professorDisciplina = "> PROFESSOR [NULL]: NULL";
+        if (prof != null) {
+            professorDisciplina = "> PROFESSOR [" + prof.getId() + "]: " +  prof.getNome();
+        }
         System.out.println("============================");
         System.out.println("> ID: " + disciplina.getId());
         System.out.println("> NOME: " + disciplina.getNome());
         System.out.println("> SEMESTRE: " + disciplina.getSemestre());
-        System.out.println("> PROFESSOR [" + prof.getId() + "]: " +  prof.getNome());
+        System.out.println(professorDisciplina);
         System.out.println("============================");
     }
 }

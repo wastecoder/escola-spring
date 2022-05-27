@@ -17,6 +17,14 @@ public class Professor {
     @OneToMany(mappedBy = "professor", fetch = FetchType.EAGER)
     private List<Disciplina> disciplinas;
 
+    @PreRemove
+    public void updateDisciplinaOnRemove() {
+        System.out.println(">>> DISCIPLINAS ATUALIZADAS PARA NULL");
+        for (Disciplina disciplina : this.getDisciplinas()) {
+            disciplina.setProfessor(null);
+        }
+    }
+
     @Deprecated // Só o Hibernate usa
     public Professor() {}
 
