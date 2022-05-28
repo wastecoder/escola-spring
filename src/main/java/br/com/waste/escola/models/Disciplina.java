@@ -1,6 +1,7 @@
 package br.com.waste.escola.models;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Table(name = "disciplinas")
@@ -17,6 +18,13 @@ public class Disciplina {
     @JoinColumn(name = "professor_id", nullable = true)
     private Professor professor;
 
+    @ManyToMany
+    @JoinTable(name = "disciplinas_alunos",
+                joinColumns = @JoinColumn(name = "disciplinas_fk"),
+                inverseJoinColumns = @JoinColumn(name = "alunos_fk"))
+    List<Aluno> alunos;
+
+    
     @Deprecated
     public Disciplina() {}
 
