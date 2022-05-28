@@ -21,10 +21,9 @@ public class Aluno {
     @Deprecated
     public Aluno() {}
 
-    public Aluno(String nome, Integer idade, List<Disciplina> disciplinas) {
+    public Aluno(String nome, Integer idade) {
         this.nome = nome;
         this.idade = idade;
-        this.disciplinas = disciplinas;
     }
 
     public Long getId() {
@@ -53,10 +52,6 @@ public class Aluno {
 
     public List<Disciplina> getDisciplinas() {
         return disciplinas;
-    }
-
-    public void setDisciplinas(List<Disciplina> disciplinas) {
-        this.disciplinas = disciplinas;
     }
 
     @Override

@@ -1,5 +1,6 @@
 package br.com.waste.escola;
 
+import br.com.waste.escola.services.AlunoService;
 import br.com.waste.escola.services.DisciplinaService;
 import br.com.waste.escola.services.ProfessorService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,11 +13,13 @@ import java.util.Scanner;
 public class EscolaApplication implements CommandLineRunner {
 	private final ProfessorService professorService;
 	private final DisciplinaService disciplinaService;
+	private final AlunoService alunoService;
 
 	@Autowired
-	public EscolaApplication(ProfessorService professorService, DisciplinaService disciplinaService) {
+	public EscolaApplication(ProfessorService professorService, DisciplinaService disciplinaService, AlunoService alunoService) {
 		this.professorService = professorService;
 		this.disciplinaService = disciplinaService;
+		this.alunoService = alunoService;
 	}
 
 	public static void main(String[] args) {
@@ -48,7 +51,7 @@ public class EscolaApplication implements CommandLineRunner {
 					disciplinaService.menu(input);
 					break;
 				case 3:
-					System.out.println("TODO: Disciplina");
+					alunoService.menu(input);
 					break;
 				default:
 					continuar = false;
