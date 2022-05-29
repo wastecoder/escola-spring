@@ -1,13 +1,18 @@
 package br.com.waste.escola.services;
 
+import br.com.waste.escola.models.Aluno;
 import br.com.waste.escola.models.Disciplina;
 import br.com.waste.escola.models.Professor;
+import br.com.waste.escola.repositories.AlunoRepository;
 import br.com.waste.escola.repositories.DisciplinaRepository;
 import br.com.waste.escola.repositories.ProfessorRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 import java.util.Scanner;
 
@@ -15,13 +20,16 @@ import java.util.Scanner;
 public class DisciplinaService {
     private final DisciplinaRepository disciplinaRepository;
     private final ProfessorRepository professorRepository;
+    private final AlunoRepository alunoRepository;
 
     @Autowired
-    public DisciplinaService(DisciplinaRepository disciplinaRepository, ProfessorRepository professorRepository) {
+    public DisciplinaService(DisciplinaRepository disciplinaRepository, ProfessorRepository professorRepository, AlunoRepository alunoRepository) {
         this.disciplinaRepository = disciplinaRepository;
         this.professorRepository = professorRepository;
+        this.alunoRepository = alunoRepository;
     }
 
+    @Transactional
     public void menu(Scanner input) {
         boolean continuar = true;
 
@@ -35,6 +43,7 @@ public class DisciplinaService {
             System.out.println("| 3 - Listar     |");
             System.out.println("| 4 - Alterar    |");
             System.out.println("| 5 - Remover    |");
+            System.out.println("| 6 - Matricular |");
             System.out.println("+----------------+");
             System.out.print("Escolha: ");
             byte escolha = input.nextByte();
@@ -55,6 +64,9 @@ public class DisciplinaService {
                     break;
                 case 5:
                     this.delete(input);
+                    break;
+                case 6:
+                    this.enrollStudent(input);
                     break;
                 default:
                     continuar = false;
@@ -79,7 +91,9 @@ public class DisciplinaService {
         Optional<Professor> optionalProfessor = professorRepository.findById(professorId);
         if (optionalProfessor.isPresent()) {
             Professor professor = optionalProfessor.get();
-            Disciplina disciplina = new Disciplina(nome, semestre, professor);
+
+            List<Aluno> alunos = this.studentLoop(input);
+            Disciplina disciplina = new Disciplina(nome, semestre, professor, alunos);
 
             System.out.println("\n>>> SUCESSO: disciplina [" + nome + "] cadastrada!");
             disciplinaRepository.save(disciplina);
@@ -179,9 +193,61 @@ public class DisciplinaService {
         }
     }
 
+    private void enrollStudent(Scanner input) {
+        System.out.println("\n>>> MATRICULANDO: aluno em disciplina <<<");
+
+        System.out.print("> Disciplina ID: ");
+        Long id = input.nextLong();
+
+        Optional<Disciplina> optionalDisciplina = disciplinaRepository.findById(id);
+        if (optionalDisciplina.isPresent()) {
+            Disciplina disciplina = optionalDisciplina.get();
+
+            List<Aluno> alunos = this.studentLoop(input);
+            disciplina.getAlunos().addAll(alunos);
+
+            System.out.println("\n>>> Alunos matriculados!");
+            disciplinaRepository.save(disciplina);
+
+        } else {
+            this.disciplinaErrormessage(id);
+        }
+    }
+
+    private List<Aluno> studentLoop(Scanner input) {
+        boolean continuar = true;
+        List<Aluno> alunos = new ArrayList<>();
+
+        System.out.println("\n>>> MATRICULANDO: alunos <<<");
+        System.out.println(">>> DICA: envie 0 para sair\n");
+        do {
+            System.out.print("> aluno id: ");
+            Long alunoId = input.nextLong();
+
+            if (alunoId > 0) {
+                Optional<Aluno> optionalAluno = alunoRepository.findById(alunoId);
+                if (optionalAluno.isPresent()) {
+                    alunos.add(optionalAluno.get());
+                } else {
+                    this.alunoErrormessage(alunoId);
+                }
+
+            } else {
+                continuar = false;
+            }
+
+        } while (continuar);
+
+        return alunos;
+    }
+
 
     private void sucessMessage(Long id, String action) {
         System.out.println("\n>>> SUCESSO: disciplina [" + id + "] " + action + "!");
+    }
+
+    private void alunoErrormessage(Long id) {
+        System.out.println("\n>>> ERRO: aluno [" + id + "] inexistente!");
     }
 
     private void professorErrormessage(Long id) {
@@ -192,6 +258,7 @@ public class DisciplinaService {
         System.out.println("\n>>> ERRO: disciplina [" + id + "] inexistente!");
     }
 
+    @Transactional
     private void showFormatter(Disciplina disciplina) {
         Professor prof = disciplina.getProfessor();
         String professorDisciplina = "> PROFESSOR [NULL]: NULL";

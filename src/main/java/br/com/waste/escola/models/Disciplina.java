@@ -24,19 +24,15 @@ public class Disciplina {
                 inverseJoinColumns = @JoinColumn(name = "alunos_fk"))
     List<Aluno> alunos;
 
-    
+
     @Deprecated
     public Disciplina() {}
 
-    public Disciplina(String nome, Integer semestre) {
-        this.nome = nome;
-        this.semestre = semestre;
-    }
-
-    public Disciplina(String nome, Integer semestre, Professor professor) {
+    public Disciplina(String nome, Integer semestre, Professor professor, List<Aluno> alunos) {
         this.nome = nome;
         this.semestre = semestre;
         this.professor = professor;
+        this.alunos = alunos;
     }
 
     public Long getId() {
@@ -71,6 +67,10 @@ public class Disciplina {
         this.professor = professor;
     }
 
+    public List<Aluno> getAlunos() {
+        return alunos;
+    }
+
     @Override
     public String toString() {
         return "Disciplina{" +
@@ -78,6 +78,7 @@ public class Disciplina {
                 ", nome='" + nome + '\'' +
                 ", semestre=" + semestre +
                 ", professor=" + professor +
+                ", alunos=" + alunos +
                 '}';
     }
 }
