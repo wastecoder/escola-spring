@@ -1,7 +1,7 @@
 package br.com.waste.escola.models;
 
 import javax.persistence.*;
-import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name = "alunos")
@@ -15,7 +15,7 @@ public class Aluno {
     private Integer idade;
 
     @ManyToMany(mappedBy = "alunos")
-    List<Disciplina> disciplinas;
+    Set<Disciplina> disciplinas;
 
 
     @Deprecated
@@ -50,7 +50,7 @@ public class Aluno {
         this.idade = idade;
     }
 
-    public List<Disciplina> getDisciplinas() {
+    public Set<Disciplina> getDisciplinas() {
         return disciplinas;
     }
 

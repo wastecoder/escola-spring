@@ -3,15 +3,14 @@ package br.com.waste.escola.services;
 import br.com.waste.escola.models.Aluno;
 import br.com.waste.escola.models.Disciplina;
 import br.com.waste.escola.repositories.AlunoRepository;
-import br.com.waste.escola.repositories.DisciplinaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.util.List;
 import java.util.Optional;
 import java.util.Scanner;
+import java.util.Set;
 
 @Service
 public class AlunoService {
@@ -165,7 +164,7 @@ public class AlunoService {
 
     @Transactional
     private void showFormatter(Aluno aluno) {
-        List<Disciplina> disciplinaList = aluno.getDisciplinas();
+        Set<Disciplina> disciplinaList = aluno.getDisciplinas();
         System.out.println("============================");
         System.out.println("> ID: " + aluno.getId());
         System.out.println("> NOME: " + aluno.getNome());

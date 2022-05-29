@@ -11,10 +11,7 @@ import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.Scanner;
+import java.util.*;
 
 @Service
 public class DisciplinaService {
@@ -92,7 +89,7 @@ public class DisciplinaService {
         if (optionalProfessor.isPresent()) {
             Professor professor = optionalProfessor.get();
 
-            List<Aluno> alunos = this.studentLoop(input);
+            Set<Aluno> alunos = this.studentLoop(input);
             Disciplina disciplina = new Disciplina(nome, semestre, professor, alunos);
 
             System.out.println("\n>>> SUCESSO: disciplina [" + nome + "] cadastrada!");
@@ -203,7 +200,7 @@ public class DisciplinaService {
         if (optionalDisciplina.isPresent()) {
             Disciplina disciplina = optionalDisciplina.get();
 
-            List<Aluno> alunos = this.studentLoop(input);
+            Set<Aluno> alunos = this.studentLoop(input);
             disciplina.getAlunos().addAll(alunos);
 
             System.out.println("\n>>> Alunos matriculados!");
@@ -214,9 +211,9 @@ public class DisciplinaService {
         }
     }
 
-    private List<Aluno> studentLoop(Scanner input) {
+    private Set<Aluno> studentLoop(Scanner input) {
         boolean continuar = true;
-        List<Aluno> alunos = new ArrayList<>();
+        Set<Aluno> alunos = new HashSet<>();
 
         System.out.println("\n>>> MATRICULANDO: alunos <<<");
         System.out.println(">>> DICA: envie 0 para sair\n");
@@ -261,15 +258,20 @@ public class DisciplinaService {
     @Transactional
     private void showFormatter(Disciplina disciplina) {
         Professor prof = disciplina.getProfessor();
+        Set<Aluno> alunos = disciplina.getAlunos();
         String professorDisciplina = "> PROFESSOR [NULL]: NULL";
         if (prof != null) {
             professorDisciplina = "> PROFESSOR [" + prof.getId() + "]: " +  prof.getNome();
         }
+
         System.out.println("============================");
         System.out.println("> ID: " + disciplina.getId());
         System.out.println("> NOME: " + disciplina.getNome());
         System.out.println("> SEMESTRE: " + disciplina.getSemestre());
         System.out.println(professorDisciplina);
+        for (Aluno aluno : alunos) {
+            System.out.println("> ALUNO [" + aluno.getId() + "]: " + aluno.getNome());
+        }
         System.out.println("============================");
     }
 }

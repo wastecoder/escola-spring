@@ -1,7 +1,7 @@
 package br.com.waste.escola.models;
 
 import javax.persistence.*;
-import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name = "disciplinas")
@@ -22,13 +22,13 @@ public class Disciplina {
     @JoinTable(name = "disciplinas_alunos",
                 joinColumns = @JoinColumn(name = "disciplinas_fk"),
                 inverseJoinColumns = @JoinColumn(name = "alunos_fk"))
-    List<Aluno> alunos;
+    Set<Aluno> alunos;
 
 
     @Deprecated
     public Disciplina() {}
 
-    public Disciplina(String nome, Integer semestre, Professor professor, List<Aluno> alunos) {
+    public Disciplina(String nome, Integer semestre, Professor professor, Set<Aluno> alunos) {
         this.nome = nome;
         this.semestre = semestre;
         this.professor = professor;
@@ -67,7 +67,7 @@ public class Disciplina {
         this.professor = professor;
     }
 
-    public List<Aluno> getAlunos() {
+    public Set<Aluno> getAlunos() {
         return alunos;
     }
 
