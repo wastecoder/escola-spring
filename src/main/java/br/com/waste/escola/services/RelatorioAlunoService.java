@@ -1,7 +1,9 @@
 package br.com.waste.escola.services;
 
 import br.com.waste.escola.models.Aluno;
+import br.com.waste.escola.models.Professor;
 import br.com.waste.escola.repositories.AlunoRepository;
+import br.com.waste.escola.repositories.ProfessorRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -11,10 +13,12 @@ import java.util.Scanner;
 @Service
 public class RelatorioAlunoService {
     private final AlunoRepository alunoRepository;
+    private final ProfessorRepository professorRepository;
 
     @Autowired
-    public RelatorioAlunoService(AlunoRepository alunoRepository) {
+    public RelatorioAlunoService(AlunoRepository alunoRepository, ProfessorRepository professorRepository) {
         this.alunoRepository = alunoRepository;
+        this.professorRepository = professorRepository;
     }
 
     public void menu(Scanner input) {
@@ -29,6 +33,7 @@ public class RelatorioAlunoService {
             System.out.println("| 2 - 1 + idade <=   |");
             System.out.println("| 3 - 1 + idade >=   |");
             System.out.println("| 4 - 3 + matriculado|");
+            System.out.println("| 5 - profs em disc  |");
             System.out.println("+--------------------+");
             System.out.print("Escolha: ");
             byte escolha = input.nextByte();
@@ -46,6 +51,9 @@ public class RelatorioAlunoService {
                     break;
                 case 4:
                     this.byNameAndAgeGreatterEqualAndEnrolled(input);
+                    break;
+                case 5:
+                    this.byProfessorAndDisciplina(input);
                     break;
                 default:
                     continuar = false;
@@ -102,8 +110,20 @@ public class RelatorioAlunoService {
         System.out.print("> idade do aluno: ");
         Integer idade = input.nextInt();
 
-
         List<Aluno> alunosNome = alunoRepository.findNameEIdadeMaiorIgualMatriculado(nome, idade, disciplina);
         alunosNome.forEach(System.out::println);
+    }
+
+    private void byProfessorAndDisciplina(Scanner input) {
+        System.out.println("\n>>> BUSCANDO: professor em disciplina <<<");
+
+        System.out.print("> nome do professor: ");
+        String nomeProfessor = input.nextLine();
+
+        System.out.print("> nome da disciplina: ");
+        String nomeDisciplina = input.nextLine();
+
+        List<Professor> professores = professorRepository.findProfessorInDisciplina(nomeProfessor, nomeDisciplina);
+        professores.forEach(System.out::println);
     }
 }
